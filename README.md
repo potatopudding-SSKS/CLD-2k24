@@ -4,13 +4,13 @@ This repo contains all the files that we (UG2k24) have had to use in our CLD spe
 3) https://github.com/Neriums05/IIIT_Stuff.git
 
 Faculty:
-    ITL-1 -> Rajakrishnan P Rajkumar
-    ITL-2 -> Aditi Mukherjee
-    CL-1  -> Parameshwari Krishnamurthy
-    LnS -> Radhika Mamidi
-    CL-2 -> Rajakrishnan P Rajkumar
+1) ITL-1 -> Rajakrishnan P Rajkumar
+2) ITL-2 -> Aditi Mukherjee
+3) CL-1  -> Parameshwari Krishnamurthy
+4) LnS -> Radhika Mamidi
+5) CL-2 -> Rajakrishnan P Rajkumar
 
-P.S: ITL-1 never had assignments that had to be submitted online, instead Raja sir had us submit the answers by the end of the class on a slip of paper, so they have not been included here :(
-    ITL-2 was supposed to cover discourse as well, but due to unforseen circumstances, we weren't able to do so, hence the notes for discourse are incomplete.
+P.S: ITL-1 never had assignments that had to be submitted online, instead Raja sir had us submit the answers by the end of the class on a slip of paper, so they have not been included here.
+ITL-2 was supposed to cover discourse as well, but due to unforseen circumstances, we weren't able to do so, hence the notes for discourse are incomplete.
 
 Welcome to IIIT! <3
