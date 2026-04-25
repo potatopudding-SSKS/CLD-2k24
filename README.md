@@ -5,14 +5,18 @@ This repo contains all the files that we (UG2k24) have had to use in our CLD spe
 4) https://github.com/potatopudding-SSKS/Famous-Last-Words (for courses in 2-1 and later)
 
 ## Faculty:
-1) ITL-1 $\rightarrow$ Rajakrishnan P Rajkumar
-2) ITL-2 $\rightarrow$ Aditi Mukherjee
-3) CL-1 $\rightarrow$ Parameshwari Krishnamurthy
-4) LnS $\rightarrow$ Radhika Mamidi
-5) CL-2 $\rightarrow$ Rajakrishnan P Rajkumar
-6) LTU $\rightarrow$ Radhika Mamidi
-7) iNLP $\rightarrow$ Manish Srivatsava
-8) DSA $\rightarrow$ Chiranjeevi Yarra
+### 1. M24:
+    1) ITL-1: Rajakrishnan P Rajkumar
+### 2. S25:
+    1) ITL-2: Aditi Mukherjee
+    2) CL-1: Parameshwari Krishnamurthy
+### 3. M25:
+    1) LnS: Radhika Mamidi
+    2) CL-2: Rajakrishnan P Rajkumar
+### 4. S26:
+    1) LTU: Radhika Mamidi
+    2) iNLP: Manish Srivatsava
+    3) DSA: Chiranjeevi Yarra
 
 Errata: 
 1. ITL-1 never had assignments that had to be submitted online, instead Raja sir had us submit the answers by the end of the class on a slip of paper, so they have not been included here.
