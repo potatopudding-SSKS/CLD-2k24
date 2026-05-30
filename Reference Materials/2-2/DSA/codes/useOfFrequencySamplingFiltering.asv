@@ -1,0 +1,121 @@
+clc
+clear all
+close all
+
+% Generate a single-tone signal with high-frequency noise
+fs = 16000;        % sampling frequency (Hz)
+t = 0:1/fs:2-1/fs; % 1 second duration
+f_tone = 1000;     % tone frequency (Hz)
+
+% Pure tone
+tone = sin(2*pi*f_tone*t);
+
+% High-frequency noise (band-limited white noise around high frequencies)
+hf_center = 8000;          % center of high-frequency noise (Hz)
+hf_bw = 6000;               % bandwidth (Hz)
+n = length(t);
+% Generate white noise and apply bandpass via FFT
+noise = randn(1,n);
+N = fft(noise);
+f = (0:n-1)*(fs/n);
+% Construct bandpass mask (two-sided)
+mask = zeros(1,n);
+% positive freqs
+pos_idx = f >= (hf_center - hf_bw/2) & f <= (hf_center + hf_bw/2);
+% corresponding negative freqs (wrap)
+neg_idx = (f >= fs-(hf_center + hf_bw/2)) & (f <= fs-(hf_center - hf_bw/2));
+mask(pos_idx | neg_idx) = 1;
+N_filtered = N .* mask;
+hf_noise = real(ifft(N_filtered));
+% Normalize noise amplitude
+hf_noise = hf_noise / std(hf_noise);
+
+% Mix tone and high-frequency noise
+noise_level = 0.99; % relative amplitude of noise
+signal = tone + noise_level * hf_noise;
+
+% Normalize final signal to avoid clipping
+sig = signal / max(abs(signal));
+%sound(sig, fs);
+
+% Design a low-pass filter via frequency sampling method and apply via IFFT
+% Target: preserve tone (~1 kHz) and remove high-frequency noise (~8 kHz)
+
+% Parameters for filter design
+Nf = n;                 % frequency samples (use same length as signal for circular conv)
+%Nf= 61;
+fc = 3000;              % cutoff frequency (Hz) - keep below HF noise
+f = (0:Nf-1)*(fs/Nf);   % frequency vector
+
+% Ideal frequency response (two-sided) - lowpass
+H = zeros(1,Nf);
+% positive freqs 0..Nyquist
+pos_idx = f <= fc;
+% negative freqs correspondingly (wrap)
+neg_idx = f >= fs - fc;
+H(pos_idx | neg_idx) = 1;
+
+% Ensure symmetry for real impulse response
+% Compute impulse response via IFFT
+%H= fftshift(H);
+h_time = real(ifft(H));
+% Center impulse response (circular to linear conversion): shift to causal FIR
+% h_time = fftshift(h_time);
+% % Truncate to reasonable FIR length
+% L = 1025; % odd length for symmetry
+% mid = Nf/2 + 1;
+% start_idx = round(mid - (L-1)/2);
+% h_fir = h_time(start_idx:start_idx+L-1);
+h_fir= h_time;
+% Apply a window to reduce sidelobes
+%h_fir = h_fir .* hann(L)';
+
+% Apply filter via convolution (linear) to avoid circular effects
+sig_filt = conv(sig, h_fir, 'same');
+
+% Normalize filtered signal
+sig_filt = sig_filt / max(abs(sig_filt));
+
+% Plots for illustration
+figure('Name','Frequency Sampling Filter Design','NumberTitle','off','Position',[100 100 1000 700]);
+
+subplot(3,2,1)
+plot(t, sig);
+title('Original Signal (time domain)')
+xlabel('Time (s)'); ylabel('Amplitude');
+xlim([0 0.01])
+
+subplot(3,2,2)
+plot(t, sig_filt);
+title('Filtered Signal (time domain)')
+xlabel('Time (s)'); ylabel('Amplitude');
+xlim([0 0.01])
+
+% Frequency domain plots
+SIG = fft(sig);
+SIGF = fft(sig_filt);
+freq_axis = (0:n-1)*(fs/n);
+
+subplot(3,2,3)
+plot(freq_axis, 20*log10(abs(SIG)+eps));
+xlim([0 fs/2]); ylim([-120 60])
+title('Original Signal Spectrum'); xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)')
+
+subplot(3,2,4)
+plot(freq_axis, 20*log10(abs(SIGF)+eps));
+xlim([0 fs/2]); ylim([-120 60])
+title('Filtered Signal Spectrum'); xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)')
+
+subplot(3,2,5)
+plot(abs(H));
+xlim([0 fs/2]);
+title('Designed Frequency Response (magnitude)')
+xlabel('Frequency (Hz)'); ylabel('|H(f)|')
+
+subplot(3,2,6)
+%stem((0:L-1)-floor((L-1)/2), h_fir, '.-')
+title('FIR Impulse Response (centered)')
+xlabel('Samples (n)'); ylabel('h[n]')
+
+% Optionally play filtered audio
+% sound(sig_filt, fs);

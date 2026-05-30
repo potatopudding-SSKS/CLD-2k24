@@ -1,0 +1,233 @@
+clc
+clear all
+close all
+
+% Parameters
+fs = 2000;            % sampling frequency (Hz)
+t = 0:1/fs:1-1/fs;    % 1 second duration
+f1 = 50;              % frequency of first cosine (Hz)
+f2 = 130;             % frequency of second cosine (Hz)
+A1 = 1; A2 = 0.7;     % amplitudes
+
+% Input signal: sum of two cosines
+x1= A1*cos(2*pi*f1*t);
+x2= A2*cos(2*pi*f2*t);
+x = x1+x2;
+
+% Design two FIR lowpass filters with same magnitude response but different phase:
+% 1) Linear-phase FIR using fir1 (symmetric coefficients)
+N = 60;               % filter order (even for Type I symmetric)
+fc = 0.5;             % normalized cutoff (0..1, 1 = Nyquist). here 0.1 -> 50 Hz
+b_lin = fir1(N, fc);  % linear phase FIR
+
+%%% Non-linear phase FIR
+grp_non= 0*pi/4;
+Hnon= fft(b_lin);
+Hnon(1:30)= Hnon(1:30).*exp(1i*grp_non);
+Hnon(32:61)= Hnon(32:61).*exp(-1i*grp_non);
+b_nonlin= ifft(Hnon);
+b_nonlin= real(b_nonlin');
+
+% Filter the signal
+y_lin= conv(b_lin,x);
+y_temp_lin= y_lin(length(b_lin):end);
+x1_lin= conv(b_lin,x1);
+x1_lin= x1_lin(length(b_lin):end);
+%x1_lin= x1_lin(1:end-length(b_lin)+1);
+x2_lin= conv(b_lin,x2);
+x2_lin= x2_lin(length(b_lin):end);
+%x2_lin= x2_lin(1:end-length(b_lin)+1);
+
+y_nonlin= conv(b_nonlin,x);
+y_temp_non= y_nonlin(length(b_nonlin):end);
+x1_non= conv(b_nonlin,x1);
+x1_non= x1_non(length(b_nonlin):end);
+%x1_non= x1_non(1:end-length(b_nonlin)+1);
+x2_non= conv(b_nonlin,x2);
+x2_non= x2_non(length(b_nonlin):end);
+%x2_non= x2_non(1:end-length(b_nonlin)+1);
+
+if mod(length(b_lin),2)==0
+    effConX= length(b_lin)/2 + 1;
+else
+    effConX= (length(b_lin)-1)/2 + 1;
+end
+
+
+% Plots
+figure('Name','Sum of Two Cosines and Filter Effects','NumberTitle','off','Position',[100 100 1000 700]);
+
+subplot(3,2,1)
+plot(t(effConX:end)-t(effConX), x(effConX:end))
+xlim([0 0.04])
+title('Input: sum of two cosines (time)')
+xlabel('Time (s)')
+ylabel('Amplitude')
+
+%nfft= 4096;
+% subplot(3,2,2)
+% plot((0:length(b_lin)-1)*fs/length(b_lin), abs(fft(b_lin)))
+% %plot(abs(fft(b_lin,nfft)))
+% hold on
+% plot((0:length(b_nonlin)-1)*fs/length(b_nonlin), abs(fft(b_nonlin)),'--')
+% %plot(abs(fft(b_nonlin,nfft)),'--')
+% xlim([0 fs/2])
+% ylim([-0.1 1.1])
+% legend('Linear-phase FIR','Nonlinear FIR')
+% title('Magnitude response (dB)')
+% xlabel('Frequency (Hz)')
+% ylabel('Magnitude (dB)')
+% hold off
+
+subplot(3,2,3)
+plot(t(effConX:end)-t(effConX), x(effConX:end))
+hold on;
+plot(t, y_temp_lin,'k--')
+xlim([0 0.04])
+title('Output with linear-phase FIR')
+xlabel('Time (s)')
+ylabel('Amplitude')
+hold off
+
+% subplot(3,2,4)
+% plot((0:length(b_lin)-1)*fs/length(b_lin), unwrap(angle(fft(b_lin))))
+% hold on
+% plot((0:length(b_nonlin)-1)*fs/length(b_nonlin), unwrap(angle(fft(b_nonlin))),'--')
+% xlim([0 fs/2])
+% %ylim([-0.1 1.1])
+% legend('Linear-phase FIR','Nonlinear FIR')
+% title('Magnitude response (dB)')
+% xlabel('Frequency (Hz)')
+% ylabel('Magnitude (dB)')
+% hold off
+
+% Zoomed comparison to show phase-induced distortion (misalignment)
+
+subplot(3,2,5)
+plot(t, y_temp_lin,'k--')
+hold on
+plot(t, x1_lin, 'k')
+plot(t, x2_lin, 'k')
+xlim([0 0.04])
+xlabel('Time (s)')
+ylabel('Amplitude')
+hold off
+
+
+
+%%% Non-linear phase FIR
+grp_non= 1*pi/4;
+Hnon= fft(b_lin);
+Hnon(1:30)= Hnon(1:30).*exp(1i*grp_non);
+Hnon(32:61)= Hnon(32:61).*exp(-1i*grp_non);
+b_nonlin= ifft(Hnon);
+b_nonlin= real(b_nonlin');
+
+% Filter the signal
+y_lin= conv(b_lin,x);
+y_temp_lin= y_lin(length(b_lin):end);
+x1_lin= conv(b_lin,x1);
+x1_lin= x1_lin(length(b_lin):end);
+%x1_lin= x1_lin(1:end-length(b_lin)+1);
+x2_lin= conv(b_lin,x2);
+x2_lin= x2_lin(length(b_lin):end);
+%x2_lin= x2_lin(1:end-length(b_lin)+1);
+
+y_nonlin= conv(b_nonlin,x);
+y_temp_non= y_nonlin(length(b_nonlin):end);
+x1_non= conv(b_nonlin,x1);
+x1_non= x1_non(length(b_nonlin):end);
+%x1_non= x1_non(1:end-length(b_nonlin)+1);
+x2_non= conv(b_nonlin,x2);
+x2_non= x2_non(length(b_nonlin):end);
+%x2_non= x2_non(1:end-length(b_nonlin)+1);
+
+subplot(3,2,2)
+plot(t, y_temp_lin)
+hold on
+plot(t, y_temp_non,'r--')
+plot(t, x1_non, 'r')
+plot(t, x2_non, 'r')
+xlim([0 0.04])
+title('Output with linear-phase FIR (pi/4)')
+xlabel('Time (s)')
+ylabel('Amplitude')
+hold off
+
+%%% Non-linear phase FIR
+grp_non= 2*pi/4;
+Hnon= fft(b_lin);
+Hnon(1:30)= Hnon(1:30).*exp(1i*grp_non);
+Hnon(32:61)= Hnon(32:61).*exp(-1i*grp_non);
+b_nonlin= ifft(Hnon);
+b_nonlin= real(b_nonlin');
+
+% Filter the signal
+y_lin= conv(b_lin,x);
+y_temp_lin= y_lin(length(b_lin):end);
+x1_lin= conv(b_lin,x1);
+x1_lin= x1_lin(length(b_lin):end);
+%x1_lin= x1_lin(1:end-length(b_lin)+1);
+x2_lin= conv(b_lin,x2);
+x2_lin= x2_lin(length(b_lin):end);
+%x2_lin= x2_lin(1:end-length(b_lin)+1);
+
+y_nonlin= conv(b_nonlin,x);
+y_temp_non= y_nonlin(length(b_nonlin):end);
+x1_non= conv(b_nonlin,x1);
+x1_non= x1_non(length(b_nonlin):end);
+%x1_non= x1_non(1:end-length(b_nonlin)+1);
+x2_non= conv(b_nonlin,x2);
+x2_non= x2_non(length(b_nonlin):end);
+%x2_non= x2_non(1:end-length(b_nonlin)+1);
+
+subplot(3,2,4)
+plot(t, y_temp_lin)
+hold on
+plot(t, y_temp_non,'r--')
+plot(t, x1_non, 'r')
+plot(t, x2_non, 'r')
+xlim([0 0.04])
+title('Output with linear-phase FIR (2pi/4)')
+xlabel('Time (s)')
+ylabel('Amplitude')
+hold off
+
+%%% Non-linear phase FIR
+grp_non= 3*pi/4;
+Hnon= fft(b_lin);
+Hnon(1:30)= Hnon(1:30).*exp(1i*grp_non);
+Hnon(32:61)= Hnon(32:61).*exp(-1i*grp_non);
+b_nonlin= ifft(Hnon);
+b_nonlin= real(b_nonlin');
+
+% Filter the signal
+y_lin= conv(b_lin,x);
+y_temp_lin= y_lin(length(b_lin):end);
+x1_lin= conv(b_lin,x1);
+x1_lin= x1_lin(length(b_lin):end);
+%x1_lin= x1_lin(1:end-length(b_lin)+1);
+x2_lin= conv(b_lin,x2);
+x2_lin= x2_lin(length(b_lin):end);
+%x2_lin= x2_lin(1:end-length(b_lin)+1);
+
+y_nonlin= conv(b_nonlin,x);
+y_temp_non= y_nonlin(length(b_nonlin):end);
+x1_non= conv(b_nonlin,x1);
+x1_non= x1_non(length(b_nonlin):end);
+%x1_non= x1_non(1:end-length(b_nonlin)+1);
+x2_non= conv(b_nonlin,x2);
+x2_non= x2_non(length(b_nonlin):end);
+%x2_non= x2_non(1:end-length(b_nonlin)+1);
+
+subplot(3,2,6)
+plot(t, y_temp_lin)
+hold on
+plot(t, y_temp_non,'r--')
+plot(t, x1_non, 'r')
+plot(t, x2_non, 'r')
+xlim([0 0.04])
+title('Output with linear-phase FIR (3pi/4)')
+xlabel('Time (s)')
+ylabel('Amplitude')
+hold off
