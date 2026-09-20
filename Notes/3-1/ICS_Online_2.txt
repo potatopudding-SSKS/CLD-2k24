@@ -1,0 +1,50 @@
+Active Perception: 
+	Brain gets a lot of sensory inputs and processes them, has different ways of coding them, representations of what was perceived.
+	There exists an integration of these sensory inputs to help us perceive the world - Very simplistic.
+	But people perceive the world in different ways - everyone represents and interprets the stimuli in different ways
+	All sensory input must be decoded and interpreted with what we know (we need more bg information). Sensory input is not enough. 
+	We generalise and try finding patterns so that we don't keep processing every input as new - we can now further perform more computations on these data.
+	Attention - Filters stimuli - we attend only to specific information that we select or prioritise
+	1. Selective Attention
+	2. Spatial Attention - "Where" is it happening
+	3. Feature-based Attention - "What" in the space are we paying attention to, "What" are we looking for?
+	4. Overt vs Covert Attention
+		Overt: What we've chosen to attend to consciously - Active
+		Covert: Not "actively" looking, yet we're aware of things happening - passive way of information coming in - Passive
+	Is attention simply a filter?
+
+Passive vs Active Perception:
+	Passive = Sensory input -> Process -> Perceive (Perceive as it comes)
+	Watching the clouds
+	Active = Sensory input -> Compare with Intention -> Process -> Perceive (Top-down forcing to make your senses try to perceive what you're expecting) (goal directed)
+	Looking for a key in the house, searching for a building, finding your friend in a crowd
+	Listening to a class lecture is a mix of both 
+	Goals determine what information becomes important/relevant.
+	Action and perception act as feedbacks to the same system - catching a ball, playing a video game, making tea etc
+	Reactions (from touching a hot stove etc) are not part of the active attention system, the reaction itself is from the peripheral nervous system, but the event is registered passively later after a small deltaT
+
+Marr's Computational Theory:
+	Perception as information processing
+	Image -> Primal Sketch (in the primary cortex for the perception to happen for example) -> 2.5D sketch -> 3D representation
+	Action is not central to the theory
+
+Gibson's Ecological Approach:
+	Organisms actively move through and explore their environments. Movement generates information.
+	We perceive objects partly in terms of what actions they afford.
+	Interlinking b/w perception and action.
+	Our perception of our environment influences the possibilities and choice of actions
+		- staircase might be easily climbable when we're well rested
+		- when we're carrying a heavy backpack, normal distances feel much larger
+
+Sensorimotor Theory of Perception:
+	Perception depends partly on knowing how sensory inputs change when we act.
+	Relations in the sensorimotor connections change the way we perceive our environment
+
+Prediction:
+	We expect to see certain patterns.
+	Prediction -> Action -> New sensory input -> Prediction Error
+	Predictions:
+		- Hierarchical - sequence or hierarchy associated with how information is perceived and processed, very predictable hierarchy
+		- Top down - Expectations
+		- Bottom up (cannot function on its own, always needs top-down)
+		- Rao & Ballard's visual cortex model
